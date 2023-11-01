@@ -10,6 +10,8 @@ public class Node : MonoBehaviour
 
     public Node parent;
 
+    public bool Selected;
+
     [Header("Probabilidades")]
     public float probImpenetrable;
     public float probHigh;
@@ -24,8 +26,8 @@ public class Node : MonoBehaviour
     public Color impenetrableCol;
 
     [Header("Datos A*")]
-    public int P;
-    public int H, D, x, y, F;
+    public float P;
+    public float H, D, x, y, F;
 
     private MeshRenderer rend;
 
@@ -36,6 +38,8 @@ public class Node : MonoBehaviour
     private void Awake()
     {
         generation = FindObjectOfType<GenerateMap>();
+        x = transform.position.x;
+        y = transform.position.y;
     }
 
     private void Start()
@@ -124,7 +128,7 @@ public class Node : MonoBehaviour
 
     private void OnMouseDown()
     {
-        Debug.Log("A");
+        FindObjectOfType<Unit>().Move();
     }
 
     private void OnMouseEnter()
@@ -134,16 +138,23 @@ public class Node : MonoBehaviour
         {
             node.Unselect();
         }
-        Selected();
+        Select();
+        if (P == 0)
+            return;
+        Unit unidad = FindObjectOfType<Unit>();
+        unidad.endNode = this;
+        unidad.CheckRoute();
     }
 
-    public void Selected()
+    public void Select()
     {
+        Selected = true;
         rend.material.color = OGColor - hoverColor;
     }
 
     public void Unselect()
     {
+        Selected = false;
         rend.material.color = OGColor;
     }
 
@@ -195,5 +206,10 @@ public class Node : MonoBehaviour
         }
     }
 
-
+    public void resetValues()
+    {
+        H = 0;
+        D = 0;
+        F = 0;
+    }
 }

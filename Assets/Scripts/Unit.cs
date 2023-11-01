@@ -1,20 +1,29 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Net;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Unit : MonoBehaviour
 {
-    public float health, production, charges, range, damage, movement;
+    public float health, production, charges, range, damage, maxMovement, movementLeft;
     public Node startNode,currentNode, endNode;
     public List<Node> closedList;
     public List<Node> openedList;
 
     private bool found;
 
+    private void Start()
+    {
+        movementLeft = maxMovement;
+    }
+
     public void CheckRoute()
     {
-
+        found= false;
+        closedList= new List<Node>();
+        openedList= new List<Node>();
+        Method();
     }
 
     public void Method()
@@ -75,10 +84,54 @@ public class Unit : MonoBehaviour
     {
         do
         {
-            currentNode.Selected();
+            currentNode.Select();
             currentNode = currentNode.parent;
         } while (currentNode != startNode);
 
-        currentNode.Selected();
+        currentNode.Select();
+    }
+
+    public void Move()
+    {
+        currentNode = startNode;
+        if(currentNode != endNode )
+            StartCoroutine(MoveCoroutine());
+    }
+
+    IEnumerator MoveCoroutine()
+    {
+        Node nextNode = currentNode;
+        foreach(Node neighbor in currentNode.neighborNodes)
+        {
+            if(neighbor.Selected)
+                nextNode = neighbor;
+        }
+
+        while (nextNode.P <= movementLeft && nextNode != endNode)
+        {
+            movementLeft -= nextNode.P;
+            transform.position = new Vector3(nextNode.transform.position.x, transform.position.y, nextNode.transform.position.z);
+
+            currentNode = nextNode;
+
+            currentNode.Unselect();
+
+            foreach (Node neighbor in currentNode.neighborNodes)
+            {
+                if (neighbor.Selected)
+                    nextNode = neighbor;
+            }
+
+            yield return new WaitForSeconds(0.2f);
+        }
+
+        if(nextNode.P <= movementLeft && nextNode == endNode)
+        {
+            movementLeft -= nextNode.P;
+            transform.position = new Vector3(nextNode.transform.position.x, transform.position.y, nextNode.transform.position.z);
+            currentNode = nextNode;
+        }
+
+        startNode = currentNode;
     }
 }

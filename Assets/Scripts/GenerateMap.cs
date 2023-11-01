@@ -25,6 +25,7 @@ public class GenerateMap : MonoBehaviour
     {
         StartCoroutine(Generate());
         usedPos = new List<Vector3>();
+        usedPos.Add(Vector3.zero);
     }
 
     IEnumerator Generate()
@@ -42,7 +43,7 @@ public class GenerateMap : MonoBehaviour
             {
                 nodes[j].FindNeighbors();
             }
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(.2f);
         }
     }
 }

@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6770671519374668833}
+  - component: {fileID: 1619030303534853350}
   m_Layer: 0
   m_Name: Knight
   m_TagString: Untagged
@@ -34,6 +35,31 @@ Transform:
   - {fileID: 6611675351489378576}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1619030303534853350
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9089910102312096232}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 663333aec53d954479855ec222815b82, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: 12
+  production: 20
+  charges: 0
+  range: 1
+  damage: 5
+  maxMovement: 4
+  movementLeft: 0
+  startNode: {fileID: 0}
+  currentNode: {fileID: 0}
+  endNode: {fileID: 0}
+  closedList: []
+  openedList: []
+  owner: {fileID: 0}
 --- !u!1001 &4186543635769402100
 PrefabInstance:
   m_ObjectHideFlags: 0

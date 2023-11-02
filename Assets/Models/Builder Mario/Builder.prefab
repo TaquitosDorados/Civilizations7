@@ -62,7 +62,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: e2e6ad25b96066e49a6e1addf4722708, type: 3}
       propertyPath: m_Name
-      value: Builder Mario Variant
+      value: Builder
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -71,6 +71,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: e2e6ad25b96066e49a6e1addf4722708, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6981508433645160183}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: e2e6ad25b96066e49a6e1addf4722708, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 471826136050757452}
   m_SourcePrefab: {fileID: 100100000, guid: e2e6ad25b96066e49a6e1addf4722708, type: 3}
 --- !u!1 &2954301644059057479 stripped
 GameObject:
@@ -90,8 +93,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 1
-  production: 0
-  charges: 0
+  production: 10
+  charges: 3
   range: 0
   damage: 0
   maxMovement: 3
@@ -101,3 +104,25 @@ MonoBehaviour:
   endNode: {fileID: 0}
   closedList: []
   openedList: []
+  owner: {fileID: 0}
+--- !u!135 &471826136050757452
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2954301644059057479}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 0.01
+  m_Center: {x: 0, y: 0, z: 0}

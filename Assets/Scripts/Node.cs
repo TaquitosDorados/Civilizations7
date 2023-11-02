@@ -12,6 +12,8 @@ public class Node : MonoBehaviour
 
     public bool Selected;
 
+    private GameManager gameManager;
+
     [Header("Probabilidades")]
     public float probImpenetrable;
     public float probHigh;
@@ -38,6 +40,7 @@ public class Node : MonoBehaviour
     private void Awake()
     {
         generation = FindObjectOfType<GenerateMap>();
+        gameManager = FindObjectOfType<GameManager>();
         x = transform.position.x;
         y = transform.position.y;
     }
@@ -128,7 +131,15 @@ public class Node : MonoBehaviour
 
     private void OnMouseDown()
     {
-        FindObjectOfType<Unit>().Move();
+        MoveUnitHere();
+    }
+
+    public void MoveUnitHere()
+    {
+        if(gameManager.currentPlayer.selectedUnit != null)
+        {
+            gameManager.currentPlayer.selectedUnit.Move();
+        }
     }
 
     private void OnMouseEnter()
@@ -141,9 +152,12 @@ public class Node : MonoBehaviour
         Select();
         if (P == 0)
             return;
-        Unit unidad = FindObjectOfType<Unit>();
-        unidad.endNode = this;
-        unidad.CheckRoute();
+
+        if(gameManager.currentPlayer.selectedUnit != null)
+        {
+            gameManager.currentPlayer.selectedUnit.endNode = this;
+            gameManager.currentPlayer.selectedUnit.CheckRoute();
+        }
     }
 
     public void Select()

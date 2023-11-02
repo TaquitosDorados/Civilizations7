@@ -5,6 +5,6 @@ using UnityEngine;
 public class Building : MonoBehaviour
 {
     public float productionGenerated = 0;
-    public Player player;
-    public float Health = -1;
+    public Player owner;
+    public float Health;
 }

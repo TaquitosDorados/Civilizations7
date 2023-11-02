@@ -10,6 +10,7 @@ public class Unit : MonoBehaviour
     public Node startNode,currentNode, endNode;
     public List<Node> closedList;
     public List<Node> openedList;
+    public Player owner;
 
     private bool found;
 
@@ -133,5 +134,16 @@ public class Unit : MonoBehaviour
         }
 
         startNode = currentNode;
+    }
+
+    private void OnMouseDown()
+    {
+        if(owner.selectedUnit == this)
+        {
+            owner.selectedUnit = null;
+        } else
+        {
+            owner.selectedUnit = this;
+        }
     }
 }

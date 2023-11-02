@@ -316,9 +316,9 @@ PrefabInstance:
       value: Builder Mario Variant
       objectReference: {fileID: 0}
     - target: {fileID: 6981508433645160183, guid: 2d9636a59da36f8409fd629c19d40bf0, type: 3}
-      propertyPath: charges
-      value: 3
-      objectReference: {fileID: 0}
+      propertyPath: owner
+      value: 
+      objectReference: {fileID: 1894195530}
     - target: {fileID: 6981508433645160183, guid: 2d9636a59da36f8409fd629c19d40bf0, type: 3}
       propertyPath: startNode
       value: 
@@ -545,6 +545,7 @@ GameObject:
   - component: {fileID: 2121203502}
   - component: {fileID: 2121203503}
   - component: {fileID: 2121203504}
+  - component: {fileID: 2121203505}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -596,6 +597,21 @@ MonoBehaviour:
   currentPlayer: {fileID: 1894195530}
   humanPlayer: {fileID: 1894195530}
   AIPlayer: {fileID: 398197835}
+--- !u!114 &2121203505
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2121203501}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 739a06c0a389087439b15738ff106394, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  camera: {fileID: 1456170559}
+  moveAmout: 10
+  edgeSize: 30
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

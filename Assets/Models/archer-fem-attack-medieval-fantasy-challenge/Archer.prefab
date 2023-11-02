@@ -9,6 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7982291529547724820}
+  - component: {fileID: 893258950859530082}
+  - component: {fileID: 9147460361984030438}
   m_Layer: 0
   m_Name: Archer
   m_TagString: Untagged
@@ -31,9 +33,55 @@ Transform:
   m_Children:
   - {fileID: 1768273719109597637}
   - {fileID: 5985893072414968308}
-  - {fileID: 7716106936606195573}
+  - {fileID: 7827158424481405087}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &893258950859530082
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 281293326843009117}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 663333aec53d954479855ec222815b82, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: 8
+  production: 15
+  charges: 0
+  range: 2
+  damage: 3
+  maxMovement: 5
+  movementLeft: 0
+  startNode: {fileID: 0}
+  currentNode: {fileID: 0}
+  endNode: {fileID: 0}
+  closedList: []
+  openedList: []
+  owner: {fileID: 0}
+--- !u!135 &9147460361984030438
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 281293326843009117}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 1.2
+  m_Center: {x: 0, y: -1.9, z: 0}
 --- !u!1001 &2233946946002935342
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -251,7 +299,7 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3fa4fc6d5dd95d645aada3335102f3ff, type: 3}
---- !u!4 &7716106936606195573 stripped
+--- !u!4 &7827158424481405087 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 3fa4fc6d5dd95d645aada3335102f3ff, type: 3}
   m_PrefabInstance: {fileID: 7716106936606195572}

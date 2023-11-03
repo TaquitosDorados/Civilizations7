@@ -10,6 +10,6 @@ public class NodeState : MonoBehaviour
 
     private void Start()
     {
-
+        production = Random.Range(0, 4);
     }
 }

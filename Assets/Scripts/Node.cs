@@ -12,6 +12,8 @@ public class Node : MonoBehaviour
 
     public bool Selected;
 
+    public NodeState state;
+
     private GameManager gameManager;
 
     [Header("Probabilidades")]
@@ -48,6 +50,8 @@ public class Node : MonoBehaviour
     private void Start()
     {
         rend = GetComponent<MeshRenderer>();
+
+        state = gameObject.AddComponent<NodeState>();
 
         float rand = Random.Range(0.0f, 1.0f);
 

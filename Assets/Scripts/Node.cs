@@ -52,7 +52,7 @@ public class Node : MonoBehaviour
 
     private void Start()
     {
-        productionUI = 
+        productionUI = GameObject.Find("productionText").GetComponent<Text>();
         rend = GetComponent<MeshRenderer>();
 
         state = gameObject.AddComponent<NodeState>();
@@ -139,7 +139,7 @@ public class Node : MonoBehaviour
 
     private void OnMouseDown()
     {
-        productionUI.text = "Produccion: " + gameObject.GetComponent<NodeState>().production;
+        productionUI.text = "Production: " + gameObject.GetComponent<NodeState>().production;
         MoveUnitHere();
     }
 

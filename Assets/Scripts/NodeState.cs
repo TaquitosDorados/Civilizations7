@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class NodeState : MonoBehaviour
 {
-    public int production;
+    public int production = 0;
     public bool occupied;
     public Building building;
 

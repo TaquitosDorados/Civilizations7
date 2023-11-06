@@ -11,10 +11,19 @@ public class Unit : MonoBehaviour
     public List<Node> closedList;
     public List<Node> openedList;
     public Player owner;
+    public bool moving;
 
     private bool found;
+    private GameManager gameManager;
 
     private void Start()
+    {
+        movementLeft = maxMovement;
+        gameManager = FindObjectOfType<GameManager>();
+        gameManager.onNextTurn += nextTurn;
+    }
+
+    private void nextTurn()
     {
         movementLeft = maxMovement;
     }
@@ -32,7 +41,9 @@ public class Unit : MonoBehaviour
         openedList.Add(startNode);
         currentNode = startNode;
 
-        while (!found)
+        int a = 0;
+
+        while (!found && a<30)
         {
             currentNode = openedList[0];
 
@@ -69,8 +80,11 @@ public class Unit : MonoBehaviour
                     }
                 }
 
-
+                
             }
+
+
+            a = a+1;
         }
     }
 
@@ -83,20 +97,28 @@ public class Unit : MonoBehaviour
 
     void Retrace()
     {
+        int a = 0;
         do
         {
             currentNode.Select();
             currentNode = currentNode.parent;
-        } while (currentNode != startNode);
+            a++;
+        } while (currentNode != startNode && a<30);
 
         currentNode.Select();
     }
 
     public void Move()
     {
+        if (moving)
+            return;
+        moving = true;
         currentNode = startNode;
-        if(currentNode != endNode )
+        if (currentNode != endNode)
+        {
+            currentNode.Unselect();
             StartCoroutine(MoveCoroutine());
+        }
     }
 
     IEnumerator MoveCoroutine()
@@ -134,6 +156,9 @@ public class Unit : MonoBehaviour
         }
 
         startNode = currentNode;
+        currentNode = null;
+        endNode = null;
+        moving = false;
     }
 
     private void OnMouseDown()

@@ -9,7 +9,19 @@ public class Player : MonoBehaviour
     public Townhall selectedTownhall;
     public List<Townhall> townhalls;
     public GameObject THUI;
+    private GameManager gameManager;
 
+    private void Start()
+    {
+        gameManager = FindAnyObjectByType<GameManager>();
+        gameManager.onNextTurn += nextTurn;
+    }
+
+    private void nextTurn()
+    {
+        selectedTownhall = null;
+        selectedUnit = null;
+    }
     public void selectTownhall(Townhall th)
     {
         selectedTownhall = th;

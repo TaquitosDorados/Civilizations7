@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Node : MonoBehaviour
 {
@@ -13,6 +14,8 @@ public class Node : MonoBehaviour
     public bool Selected;
 
     public NodeState state;
+
+    private Text productionUI;
 
     private GameManager gameManager;
 
@@ -49,6 +52,7 @@ public class Node : MonoBehaviour
 
     private void Start()
     {
+        productionUI = 
         rend = GetComponent<MeshRenderer>();
 
         state = gameObject.AddComponent<NodeState>();
@@ -135,6 +139,7 @@ public class Node : MonoBehaviour
 
     private void OnMouseDown()
     {
+        productionUI.text = "Produccion: " + gameObject.GetComponent<NodeState>().production;
         MoveUnitHere();
     }
 

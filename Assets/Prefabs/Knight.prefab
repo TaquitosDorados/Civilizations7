@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6770671519374668833}
   - component: {fileID: 1619030303534853350}
+  - component: {fileID: 120236351361406261}
   m_Layer: 0
   m_Name: Knight
   m_TagString: Untagged
@@ -48,7 +49,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 12
-  production: 20
+  maxHealth: 12
+  production: 70
   charges: 0
   range: 1
   damage: 5
@@ -60,6 +62,29 @@ MonoBehaviour:
   closedList: []
   openedList: []
   owner: {fileID: 0}
+  moving: 0
+  isBuilder: 0
+--- !u!135 &120236351361406261
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9089910102312096232}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 1.17
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &4186543635769402100
 PrefabInstance:
   m_ObjectHideFlags: 0

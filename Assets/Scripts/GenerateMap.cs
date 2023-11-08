@@ -45,5 +45,7 @@ public class GenerateMap : MonoBehaviour
             }
             yield return new WaitForSeconds(.2f);
         }
+
+        GetComponent<GameManager>().findSpots();
     }
 }

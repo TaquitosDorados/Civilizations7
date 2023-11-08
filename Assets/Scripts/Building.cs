@@ -4,7 +4,15 @@ using UnityEngine;
 
 public class Building : MonoBehaviour
 {
-    public float productionGenerated = 0;
+    public int productionGenerated = 0;
     public Player owner;
     public float Health;
+    public NodeState node;
+    public bool isTH;
+
+    public void addProductionToNode()
+    {
+        node.production += productionGenerated;
+        node.building = this;
+    }
 }

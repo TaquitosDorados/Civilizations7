@@ -62,6 +62,7 @@ public class Node : MonoBehaviour
         if (rand <= probImpenetrable)
         {
             P = 0;
+            GetComponent<NodeState>().occupied = true;
         }
         else if (rand <= (probLow + probImpenetrable))
         {
@@ -145,7 +146,7 @@ public class Node : MonoBehaviour
 
     public void MoveUnitHere()
     {
-        if(gameManager.currentPlayer.selectedUnit != null)
+        if(gameManager.currentPlayer.selectedUnit != null )
         {
             gameManager.currentPlayer.selectedUnit.Move();
         }

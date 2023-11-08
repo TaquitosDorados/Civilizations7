@@ -3,21 +3,24 @@ using System.Collections.Generic;
 using System.Net;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Unit : MonoBehaviour
 {
-    public float health, production, charges, range, damage, maxMovement, movementLeft;
+    public float health, maxHealth, production, charges, range, damage, maxMovement, movementLeft;
     public Node startNode,currentNode, endNode;
     public List<Node> closedList;
     public List<Node> openedList;
     public Player owner;
     public bool moving;
+    public bool isBuilder;
 
     private bool found;
     private GameManager gameManager;
 
     private void Start()
     {
+        health = maxHealth;
         movementLeft = maxMovement;
         gameManager = FindObjectOfType<GameManager>();
         gameManager.onNextTurn += nextTurn;
@@ -25,6 +28,14 @@ public class Unit : MonoBehaviour
 
     private void nextTurn()
     {
+        if (movementLeft == maxMovement)
+        {
+            health += 2;
+            if (health > maxHealth)
+            {
+                health = maxHealth;
+            }
+        }
         movementLeft = maxMovement;
     }
 
@@ -38,6 +49,7 @@ public class Unit : MonoBehaviour
 
     public void Method()
     {
+        startNode.D = 0;
         openedList.Add(startNode);
         currentNode = startNode;
 
@@ -66,7 +78,7 @@ public class Unit : MonoBehaviour
 
             foreach (Node neighbor in currentNode.neighborNodes)
             {
-                if (neighbor.P == 0 || closedList.Contains(neighbor))
+                if (neighbor.P == 0 || closedList.Contains(neighbor) || neighbor.GetComponent<NodeState>().occupied)
                     continue;
 
                 if (currentNode.D + 1 < neighbor.D || !openedList.Contains(neighbor))
@@ -123,6 +135,8 @@ public class Unit : MonoBehaviour
 
     IEnumerator MoveCoroutine()
     {
+        startNode.GetComponent<NodeState>().occupied = false;
+
         Node nextNode = currentNode;
         foreach(Node neighbor in currentNode.neighborNodes)
         {
@@ -156,6 +170,8 @@ public class Unit : MonoBehaviour
         }
 
         startNode = currentNode;
+        startNode.GetComponent<NodeState>().occupied = true;
+        startNode.D = 0;
         currentNode = null;
         endNode = null;
         moving = false;
@@ -163,12 +179,105 @@ public class Unit : MonoBehaviour
 
     private void OnMouseDown()
     {
-        if(owner.selectedUnit == this)
+        GameObject.Find("Healthbar").GetComponent<Slider>().value = health / maxHealth;
+
+        if (!owner.isCPU)
         {
-            owner.selectedUnit = null;
+
+            if (owner.selectedUnit == this)
+            {
+                owner.selectedUnit = null;
+            }
+            else
+            {
+                owner.selectedUnit = this;
+            }
         } else
         {
-            owner.selectedUnit = this;
+            if (gameManager.humanPlayer.selectedUnit != null)
+            {
+                gameManager.humanPlayer.selectedUnit.tryAttackOnUnit(this);
+            }
         }
+    }
+
+    public void receiveDamage(float damage)
+    {
+        Debug.Log("attacked");
+        health -= damage;
+
+        if (health <= 0)
+        {
+            if (owner.selectedUnit == this)
+                owner.selectedUnit = null;
+            Destroy(gameObject);
+        }
+    }
+
+    public void tryAttackOnUnit(Unit attackedUnit)
+    {
+        Debug.Log("trying attack");
+        startNode.D = 0;
+        found = false;
+        closedList = new List<Node>();
+        openedList = new List<Node>();
+        attackedUnit.startNode = endNode;
+        openedList.Add(startNode);
+        currentNode = startNode;
+
+        int a = 0;
+
+        while (!found && a < 30)
+        {
+            currentNode = openedList[0];
+
+            foreach (Node node in openedList)
+            {
+                if (node.F < currentNode.F)
+                {
+                    currentNode = node;
+                }
+            }
+
+            openedList.Remove(currentNode);
+            closedList.Add(currentNode);
+
+            if (currentNode == endNode)
+            {
+                found = true;
+            }
+
+            foreach (Node neighbor in currentNode.neighborNodes)
+            {
+                if (neighbor.P == 0 || closedList.Contains(neighbor))
+                    continue;
+
+                if (currentNode.D + 1 < neighbor.D || !openedList.Contains(neighbor))
+                {
+                    giveValuesToNode(neighbor);
+                    neighbor.parent = currentNode;
+
+                    if (!openedList.Contains(neighbor))
+                    {
+                        openedList.Add(neighbor);
+                    }
+                }
+
+
+            }
+
+
+            a = a + 1;
+        }
+
+        if (endNode.D <= range)
+        {
+            float damageToReceive = attackedUnit.damage / 2;
+            attackedUnit.receiveDamage(damage);
+            if(range == 1)
+                receiveDamage(damageToReceive);
+        }
+
+        GameObject.Find("Healthbar").GetComponent<Slider>().value = health / maxHealth;
     }
 }

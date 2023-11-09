@@ -93,7 +93,7 @@ public class AIScript : MonoBehaviour
             foreach (Unit unit in MilitaryUnits)
             {
                 yield return new WaitForSeconds(1f);
-                choosePasive(unit);
+                StartCoroutine(choosePasive(unit));
             }
         } else if (turn < 20)
         {
@@ -113,7 +113,7 @@ public class AIScript : MonoBehaviour
                             yield return new WaitForSeconds(.2f);
                             neighbor.MoveUnitHere();
                             yield return new WaitForSeconds(1f);
-                            if (AIPlayer.selectedUnit.startNode = neighbor)
+                            if (AIPlayer.selectedUnit.startNode == neighbor)
                             {
                                 tryToBuild();
                             }
@@ -142,7 +142,7 @@ public class AIScript : MonoBehaviour
                                     yield return new WaitForSeconds(.2f);
                                     neighborOfNeighbor.MoveUnitHere();
 
-                                    if (AIPlayer.selectedUnit.startNode = neighborOfNeighbor)
+                                    if (AIPlayer.selectedUnit.startNode == neighborOfNeighbor)
                                     {
                                         tryToBuildTH();
                                     }
@@ -195,6 +195,107 @@ public class AIScript : MonoBehaviour
                 yield return new WaitForSeconds(1f);
                 StartCoroutine(choosePasive(unit));
             }
+        } else
+        {
+            //Constructores
+            foreach (Unit builder in Builders)
+            {
+                bool success = false;
+                yield return new WaitForSeconds(1f);
+                AIPlayer.selectedUnit = builder;
+                foreach (Townhall th in AIPlayer.townhalls)
+                {
+                    foreach (Node neighbor in th.node.neighborNodes)
+                    {
+                        if (!neighbor.GetComponent<NodeState>().occupied && neighbor.GetComponent<NodeState>().building == null && (neighbor.P == 1 || neighbor.P == 3))
+                        {
+                            neighbor.selectNodeToMethod();
+                            yield return new WaitForSeconds(.2f);
+                            neighbor.MoveUnitHere();
+                            yield return new WaitForSeconds(1f);
+                            if (AIPlayer.selectedUnit.startNode == neighbor)
+                            {
+                                tryToBuild();
+                            }
+                            success = true;
+                            break;
+                        }
+                    }
+                    if (success)
+                        break;
+                }
+                //NO HAY ESPACIO PARA CONSTRUCCIONES
+                if (!success && AIPlayer.selectedUnit.charges == 3)
+                {
+
+                    foreach (Townhall th in AIPlayer.townhalls)
+                    {
+                        foreach (Node neighbor in th.node.neighborNodes)
+                        {
+                            foreach (Node neighborOfNeighbor in neighbor.neighborNodes)
+                            {
+                                if (!neighborOfNeighbor.GetComponent<NodeState>().occupied
+                                    && !th.node.neighborNodes.Contains(neighborOfNeighbor)
+                                    && neighbor.GetComponent<NodeState>().building == null)
+                                {
+                                    neighborOfNeighbor.selectNodeToMethod();
+                                    yield return new WaitForSeconds(.2f);
+                                    neighborOfNeighbor.MoveUnitHere();
+
+                                    if (AIPlayer.selectedUnit.startNode == neighborOfNeighbor)
+                                    {
+                                        tryToBuildTH();
+                                    }
+
+                                    success = true;
+                                    break;
+                                }
+                            }
+                            if (success)
+                                break;
+                        }
+                        if (success)
+                            break;
+                    }
+                }
+            }
+
+            //Producir en TH's
+            foreach (Townhall townhall in AIPlayer.townhalls)
+            {
+                AIPlayer.selectedTownhall = townhall;
+
+                if (!townhall.onProduction)
+                {
+                    if (Builders.Count < 1)
+                    {
+                        AIPlayer.produceUnit(builderPrefab);
+                    }
+                    else
+                    {
+                        float rand = Random.Range(0f, 1f);
+                        if (rand < 0.4f)
+                        {
+                            AIPlayer.produceUnit(archerPrefab);
+                        }
+                        else if (rand < 0.8f)
+                        {
+                            AIPlayer.produceUnit(warriorPrefab);
+                        }
+                        else
+                        {
+                            AIPlayer.produceUnit(builderPrefab);
+                        }
+                    }
+                }
+            }
+
+            //Mover Unidades
+            foreach (Unit unit in MilitaryUnits)
+            {
+                yield return new WaitForSeconds(1f);
+                StartCoroutine(ChooseAggro(unit));
+            }
         }
         yield return new WaitForSeconds(2f);
         gameManager.finishAITurn();
@@ -202,6 +303,8 @@ public class AIScript : MonoBehaviour
 
     IEnumerator choosePasive(Unit _unit)
     {
+        AIPlayer.selectedUnit = _unit;
+
         Unit closestEnemy = EnemyUnits[0];
 
         foreach(Unit enemy in EnemyUnits)
@@ -231,6 +334,7 @@ public class AIScript : MonoBehaviour
                                     neighborBuild.selectNodeToMethod();
                                     yield return new WaitForSeconds(.2f);
                                     neighborBuild.MoveUnitHere();
+                                    yield return new WaitForSeconds(1f);
                                     neighbor.MoveUnitHere();
                                     yield break;
                                 }
@@ -242,6 +346,7 @@ public class AIScript : MonoBehaviour
                         neighbor.selectNodeToMethod();
                         yield return new WaitForSeconds(.2f);
                         neighbor.MoveUnitHere();
+                        yield return new WaitForSeconds(1f);
                         closestEnemy.startNode.MoveUnitHere();
                         yield break;
                     }
@@ -250,6 +355,89 @@ public class AIScript : MonoBehaviour
         } else
         {
             StartCoroutine(moveUnitToRandomLocation(_unit));
+        }
+    }
+
+    IEnumerator ChooseAggro(Unit _unit)
+    {
+        AIPlayer.selectedUnit = _unit;
+
+        Unit closestEnemy = EnemyUnits[0];
+
+        foreach (Unit enemy in EnemyUnits)
+        {
+            if (Vector3.Distance(_unit.transform.position, enemy.transform.position) < Vector3.Distance(_unit.transform.position, closestEnemy.transform.position))
+            {
+                closestEnemy = enemy;
+            }
+        }
+        Building[] allBuilds = FindObjectsOfType<Building>();
+        List<Building> enemyBuilds = new List<Building>();
+        foreach(Building build in allBuilds)
+        {
+            if (build.owner != AIPlayer)
+                enemyBuilds.Add(build);
+        }
+
+        Building closestEnemyBuilding = enemyBuilds[0];
+
+        foreach(Building build in enemyBuilds)
+        {
+            if (Vector3.Distance(_unit.transform.position, build.transform.position) < Vector3.Distance(_unit.transform.position, closestEnemyBuilding.transform.position))
+            {
+                closestEnemyBuilding = build;
+            }
+        }
+
+        if(Vector3.Distance(_unit.transform.position, closestEnemy.transform.position) < Vector3.Distance(_unit.transform.position, closestEnemyBuilding.transform.position))
+        {
+            if(_unit.health/_unit.maxHealth >= closestEnemy.health / closestEnemy.maxHealth)
+            {
+                //Atacar Unidad
+                foreach (Node neighbor in closestEnemy.startNode.neighborNodes)
+                {
+                    if (!neighbor.GetComponent<NodeState>().occupied)
+                    {
+                        neighbor.selectNodeToMethod();
+                        yield return new WaitForSeconds(.2f);
+                        neighbor.MoveUnitHere();
+                        yield return new WaitForSeconds(1f);
+                        closestEnemy.startNode.MoveUnitHere();
+                        yield break;
+                    }
+                }
+            }
+            else
+            {
+                //Atacar Build
+                foreach (Node neighbor in closestEnemyBuilding.node.GetComponent<Node>().neighborNodes)
+                {
+                    if (!neighbor.GetComponent<NodeState>().occupied)
+                    {
+                        neighbor.selectNodeToMethod();
+                        yield return new WaitForSeconds(.2f);
+                        neighbor.MoveUnitHere();
+                        yield return new WaitForSeconds(1f);
+                        closestEnemyBuilding.node.GetComponent<Node>().MoveUnitHere();
+                        yield break;
+                    }
+                }
+            }
+        } else
+        {
+            //Atacar Build
+            foreach(Node neighbor in closestEnemyBuilding.node.GetComponent<Node>().neighborNodes)
+            {
+                if (!neighbor.GetComponent<NodeState>().occupied)
+                {
+                    neighbor.selectNodeToMethod();
+                    yield return new WaitForSeconds(.2f);
+                    neighbor.MoveUnitHere();
+                    yield return new WaitForSeconds(1f);
+                    closestEnemyBuilding.node.GetComponent<Node>().MoveUnitHere();
+                    yield break;
+                }
+            }
         }
     }
 

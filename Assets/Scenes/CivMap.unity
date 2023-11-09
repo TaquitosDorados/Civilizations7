@@ -533,6 +533,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73f68057b42520c4587c6a866289e648, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  builderPrefab: {fileID: 2036197992500607565, guid: 3e9a6f93c5e1bb4468f59ccecd249f43, type: 3}
+  warriorPrefab: {fileID: 9089910102312096232, guid: 388409d0538ac4f4cb9080e4aefd9064, type: 3}
+  archerPrefab: {fileID: 281293326843009117, guid: 13edeb217fd34734b8c848494badcd46, type: 3}
+  THPrefab: {fileID: 3698846984278653000, guid: 964cb468f8baea044a9e4486db2003d7, type: 3}
+  minePrefab: {fileID: 4124170990843303236, guid: 90f26636fe28f274eb2fdcd982e361bd, type: 3}
+  farmPrefab: {fileID: 2717765226012205852, guid: 00e415ec85258af45b50e78572ddc227, type: 3}
+  MilitaryUnits: []
+  Builders: []
+  EnemyUnits: []
+  turn: 0
 --- !u!1 &408237672
 GameObject:
   m_ObjectHideFlags: 0

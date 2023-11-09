@@ -167,6 +167,11 @@ public class Node : MonoBehaviour
 
     private void OnMouseEnter()
     {
+        if(gameManager.currentPlayer != gameManager.humanPlayer)
+        {
+            return;
+        }
+
         Node[] brothers = FindObjectsOfType<Node>();
         foreach (Node node in brothers)
         {
@@ -177,6 +182,24 @@ public class Node : MonoBehaviour
             return;
 
         if(gameManager.currentPlayer.selectedUnit != null)
+        {
+            gameManager.currentPlayer.selectedUnit.endNode = this;
+            gameManager.currentPlayer.selectedUnit.CheckRoute();
+        }
+    }
+
+    public void selectNodeToMethod()
+    {
+        Node[] brothers = FindObjectsOfType<Node>();
+        foreach (Node node in brothers)
+        {
+            node.Unselect();
+        }
+        Select();
+        if (P == 0)
+            return;
+
+        if (gameManager.currentPlayer.selectedUnit != null)
         {
             gameManager.currentPlayer.selectedUnit.endNode = this;
             gameManager.currentPlayer.selectedUnit.CheckRoute();

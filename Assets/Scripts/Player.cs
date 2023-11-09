@@ -55,6 +55,8 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
+        if(isCPU) { return; }
+
         if (selectedUnit == null)
         {
             if(BuilderUI!= null)

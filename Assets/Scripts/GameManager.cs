@@ -17,15 +17,18 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         ai = FindObjectOfType<AIScript>();
+        currentPlayer = humanPlayer;
     }
 
     public void finishTurn()
     {
         ai.startTurn();
+        currentPlayer = AIPlayer;
     }
 
     public void finishAITurn()
     {
+        currentPlayer = humanPlayer;
         if (onNextTurn != null)
             onNextTurn();
         NextTurnUI.SetActive(true);

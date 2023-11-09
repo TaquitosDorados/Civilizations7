@@ -58,7 +58,6 @@ public class Townhall : MonoBehaviour
 
     private void unitProduced()
     {
-        Debug.Log("Trying Build");
         foreach(Node neighbor in node.neighborNodes)
         {
             if (!neighbor.GetComponent<NodeState>().occupied)

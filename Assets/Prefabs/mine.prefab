@@ -107,4 +107,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   productionGenerated: 3
   owner: {fileID: 0}
-  Health: 12
+  health: 12
+  node: {fileID: 0}
+  isTH: 0

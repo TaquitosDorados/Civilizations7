@@ -33,7 +33,6 @@ public class Townhall : MonoBehaviour
     {
         producingUnit = newUnit;
         onProduction = true;
-
         productionLeft = producingUnit.GetComponent<Unit>().production;
     }
 
@@ -59,18 +58,21 @@ public class Townhall : MonoBehaviour
 
     private void unitProduced()
     {
+        Debug.Log("Trying Build");
         foreach(Node neighbor in node.neighborNodes)
         {
             if (!neighbor.GetComponent<NodeState>().occupied)
             {
-                Vector3 newPos = new Vector3(neighbor.transform.position.x, producingUnit.transform.position.y, neighbor.transform.position.z);
-                var newUnit = Instantiate(producingUnit, newPos, producingUnit.transform.rotation);
+                //Vector3 newPos = new Vector3(neighbor.transform.position.x, producingUnit.transform.position.y, neighbor.transform.position.z);
+                var newUnit = Instantiate(producingUnit);
+                newUnit.transform.position = new Vector3(neighbor.transform.position.x, newUnit.transform.position.y, neighbor.transform.position.z);
                 newUnit.GetComponent<Unit>().owner = owner;
                 newUnit.GetComponent<Unit>().startNode = neighbor;
 
                 neighbor.GetComponent<NodeState>().occupied = true;
                 producingUnit = null;
                 onProduction = false;
+                break;
             }
         }
     }

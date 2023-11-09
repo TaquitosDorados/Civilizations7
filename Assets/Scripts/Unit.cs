@@ -76,6 +76,11 @@ public class Unit : MonoBehaviour
                 Retrace();              
             }
 
+            if (currentNode == null)
+            {
+                return;
+            }
+
             foreach (Node neighbor in currentNode.neighborNodes)
             {
                 if (neighbor.P == 0 || closedList.Contains(neighbor) || neighbor.GetComponent<NodeState>().occupied)
@@ -112,6 +117,8 @@ public class Unit : MonoBehaviour
         int a = 0;
         do
         {
+            if(currentNode==null)
+            { return; }
             currentNode.Select();
             currentNode = currentNode.parent;
             a++;
@@ -216,12 +223,14 @@ public class Unit : MonoBehaviour
 
     public void tryAttackOnUnit(Unit attackedUnit)
     {
+        if (movementLeft < 1)
+            return;
         Debug.Log("trying attack");
         startNode.D = 0;
         found = false;
         closedList = new List<Node>();
         openedList = new List<Node>();
-        attackedUnit.startNode = endNode;
+        endNode = attackedUnit.startNode;
         openedList.Add(startNode);
         currentNode = startNode;
 
@@ -272,6 +281,7 @@ public class Unit : MonoBehaviour
 
         if (endNode.D <= range)
         {
+            movementLeft = 0;
             float damageToReceive = attackedUnit.damage / 2;
             attackedUnit.receiveDamage(damage);
             if(range == 1)
@@ -279,5 +289,73 @@ public class Unit : MonoBehaviour
         }
 
         GameObject.Find("Healthbar").GetComponent<Slider>().value = health / maxHealth;
+    }
+
+    public void tryAttackOnBuilding(Building attackedBuilding, Node _node)
+    {
+        if (movementLeft < 1)
+            return;
+
+        Debug.Log("trying attack");
+        startNode.D = 0;
+        found = false;
+        closedList = new List<Node>();
+        openedList = new List<Node>();
+        endNode = _node;
+        openedList.Add(startNode);
+        currentNode = startNode;
+
+        int a = 0;
+
+        while (!found && a < 30)
+        {
+            currentNode = openedList[0];
+
+            foreach (Node node in openedList)
+            {
+                if (node.F < currentNode.F)
+                {
+                    currentNode = node;
+                }
+            }
+
+            openedList.Remove(currentNode);
+            closedList.Add(currentNode);
+
+            if (currentNode == endNode)
+            {
+                found = true;
+            }
+
+            foreach (Node neighbor in currentNode.neighborNodes)
+            {
+                if (neighbor.P == 0 || closedList.Contains(neighbor))
+                    continue;
+
+                if (currentNode.D + 1 < neighbor.D || !openedList.Contains(neighbor))
+                {
+                    giveValuesToNode(neighbor);
+                    neighbor.parent = currentNode;
+
+                    if (!openedList.Contains(neighbor))
+                    {
+                        openedList.Add(neighbor);
+                    }
+                }
+
+
+            }
+
+
+            a = a + 1;
+        }
+
+        if (endNode.D <= range)
+        {
+            movementLeft = 0;
+            attackedBuilding.receiveDamage(damage);
+            if (range == 1 && attackedBuilding.isTH)
+                receiveDamage(5);
+        }
     }
 }

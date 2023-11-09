@@ -148,7 +148,20 @@ public class Node : MonoBehaviour
     {
         if(gameManager.currentPlayer.selectedUnit != null )
         {
-            gameManager.currentPlayer.selectedUnit.Move();
+            if (GetComponent<NodeState>().building != null)
+            {
+                if(GetComponent<NodeState>().building.owner != gameManager.currentPlayer.selectedUnit.owner)
+                {
+                    gameManager.currentPlayer.selectedUnit.tryAttackOnBuilding(GetComponent<NodeState>().building, this);
+                } else
+                {
+                    gameManager.currentPlayer.selectedUnit.Move();
+                }
+            }
+            else
+            {
+                gameManager.currentPlayer.selectedUnit.Move();
+            }
         }
     }
 
